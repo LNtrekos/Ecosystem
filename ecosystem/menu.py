@@ -60,32 +60,37 @@ def add_new_species(ecosystem):
         print("No ecosystem exists yet! Create one first.")
         return
 
-    user_input_name = user_input_character("Please Enter genus Name: ")
+    while True:
+        user_input_name = user_input_character("Please Enter genus Name (or type 'exit' to stop): ").strip()
 
-    user_input_population = user_input_int(
-        input_prompt=f"Please Enter {user_input_name}'s Population: ",
-        check_prompt="Population cannot be negative!",
-        error_prompt="Invalid input. Please enter an integer greater than 0.",
-        lower_limit=1
-    )
+        if user_input_name == "" or user_input_name.lower() == "exit":
+            print("RetuReturningring to main menu")
+            return
 
-    user_input_growth_rate = user_input_float(
-        input_prompt=f"Please Enter {user_input_name}'s Growth rate: ",
-        check_prompt="Growth rate cannot be negative!",
-        error_prompt="Invalid input. Please enter a real number greater than 0.",
-        lower_limit=1e-16
-    )
+        user_input_population = user_input_int(
+            input_prompt=f"Please Enter {user_input_name}'s Population: ",
+            check_prompt="Population cannot be negative!",
+            error_prompt="Invalid input. Please enter an integer greater than 0.",
+            lower_limit=1
+            )
 
-    user_input_mutation_rate = user_input_float(
-        input_prompt=f"Please Enter {user_input_name}'s mutation rate (0-1): ",
-        check_prompt="Mutation rate must be between 0 and 1!",
-        error_prompt="Invalid input. Please enter a number between 0 and 1.",
-        lower_limit=0,
-        upper_limit=1
-    )
+        user_input_growth_rate = user_input_float(
+            input_prompt=f"Please Enter {user_input_name}'s Growth rate: ",
+            check_prompt="Growth rate cannot be negative!",
+            error_prompt="Invalid input. Please enter a real number greater than 0.",
+            lower_limit=1e-16
+        )
 
-    genus = Species(user_input_name, user_input_population, user_input_growth_rate, user_input_mutation_rate)
-    ecosystem.add_species(genus)
+        user_input_mutation_rate = user_input_float(
+            input_prompt=f"Please Enter {user_input_name}'s mutation rate (0-1): ",
+            check_prompt="Mutation rate must be between 0 and 1!",
+            error_prompt="Invalid input. Please enter a number between 0 and 1.",
+            lower_limit=0, upper_limit=1
+        )
+
+        genus = Species(user_input_name, user_input_population, user_input_growth_rate, user_input_mutation_rate)
+        ecosystem.add_species(genus)
+        
 
 
 def search_species(ecosystem):
@@ -94,68 +99,86 @@ def search_species(ecosystem):
         print("No ecosystem exists yet! Create one first.")
         return
 
-    user_input = user_input_character("Please enter genus' name you wish to search: ").strip()
+    while True:
+        user_input = user_input_character("Please enter genus' name you wish to search (or type 'exit' to stop): ").strip()
 
-    for genus in ecosystem.species_list:
-        if user_input.lower() == genus.name.lower():
-            ecosystem.search_species(genus)
+        if user_input.lower() == "exit":
+            print("Returning to main menu.")
             return
-        
 
-    print(f"{user_input} does not live in the ecosystem")
+        for genus in ecosystem.species_list:
+            if user_input.lower() == genus.name.lower():
+                ecosystem.search_species(genus)
+                
+        print(f"{user_input} does not live in the ecosystem")
 
 
 def update_species(ecosystem):
 
+    print("\n")
     if ecosystem == None:
         print("No ecosystem exists yet! Create one first.")
         return
     
     list_len = len(ecosystem.species_list)
     
-    counter = 1
-    for genus in ecosystem.species_list:
-        print(f"{counter}. {genus.name}")
-        counter += 1
-    
-    user_input = user_input_int(
-        input_prompt = f"Please enter the number (from 1 to {list_len}) of the genus you wish to remove: ",
-        check_prompt = f"Please choose an integer from 1 to {list_len}",
-        error_prompt = f"Wrong Input. Please choose an integer from 1 to {list_len}",
-        lower_limit = 1,
-        upper_limit = list_len
-    )
+    while True:
 
-    user_input = user_input - 1 # python's indexing
-    chosen_genus = ecosystem.species_list[user_input]
+        print("-----------------------------")
+        print("        Species List         ")
+        print("-----------------------------")
 
-    user_input_population = user_input_int(
-        input_prompt=f"Please Enter {chosen_genus}'s Population: ",
-        check_prompt="Population cannot be negative!",
-        error_prompt="Invalid input. Please enter an integer greater than 0.",
-        lower_limit=1
-    )
-    ecosystem.species_list[user_input].population = user_input_population
+        counter = 1
+        for genus in ecosystem.species_list:
+            print(f"{counter}. {genus.name}")
+            counter += 1
+        print(f"{counter}. Exit")
+        
 
-    user_input_growth_rate = user_input_float(
-        input_prompt=f"Please Enter {chosen_genus}'s Growth rate: ",
-        check_prompt="Growth rate cannot be negative!",
-        error_prompt="Invalid input. Please enter a real number greater than 0.",
-        lower_limit=1e-16
-    )
-    ecosystem.species_list[user_input].growth_rate = user_input_growth_rate
+        user_input = user_input_int(
+        input_prompt = f"Please enter the number (from 1 to {list_len}) of the genus you wish to remove: (or {list_len + 1 } to exit): ",
+        check_prompt = f"Please choose an integer from 1 to {list_len + 1}",
+        error_prompt = f"Wrong Input. Please choose an integer from 1 to {list_len + 1}",
+        lower_limit = 1, upper_limit = list_len + 1
+        )
+        print("\n")
 
-    user_input_mutation_rate = user_input_float(
-        input_prompt=f"Please Enter {chosen_genus}'s mutation rate (0-1): ",
-        check_prompt="Mutation rate must be between 0 and 1!",
-        error_prompt="Invalid input. Please enter a number between 0 and 1.",
-        lower_limit=0,
-        upper_limit=1
-    )
-    ecosystem.species_list[user_input].mutation_rate = user_input_mutation_rate
+        if user_input == (list_len + 1):
+            print("Returning to main menu.")
+            return
 
-    print(f"{chosen_genus} new features are: \n")
-    print(ecosystem.species_list[user_input].display_info())
+        user_input = user_input - 1 # python's indexing
+        chosen_genus = ecosystem.species_list[user_input]
+
+        user_input_population = user_input_int(
+            input_prompt=f"Please Enter {chosen_genus}'s Population: ",
+            check_prompt="Population cannot be negative!",
+            error_prompt="Invalid input. Please enter an integer greater than 0.",
+            lower_limit=1
+        )
+        ecosystem.species_list[user_input].population = user_input_population
+
+        user_input_growth_rate = user_input_float(
+            input_prompt=f"Please Enter {chosen_genus}'s Growth rate: ",
+            check_prompt="Growth rate cannot be negative!",
+            error_prompt="Invalid input. Please enter a real number greater than 0.",
+            lower_limit=1e-16
+        )
+        ecosystem.species_list[user_input].growth_rate = user_input_growth_rate
+
+        user_input_mutation_rate = user_input_float(
+            input_prompt=f"Please Enter {chosen_genus}'s mutation rate (0-1): ",
+            check_prompt="Mutation rate must be between 0 and 1!",
+            error_prompt="Invalid input. Please enter a number between 0 and 1.",
+            lower_limit=0,
+            upper_limit=1
+        )
+        ecosystem.species_list[user_input].mutation_rate = user_input_mutation_rate
+
+        print("\n" + f"{chosen_genus}'s new features are:\n")
+        print(ecosystem.species_list[user_input].display_info())
+        print("\n" * 2)
+        
     
 
 
@@ -164,25 +187,36 @@ def remove_species(ecosystem):
     if ecosystem == None:
         print("No ecosystem exists yet! Create one first.")
         return
-
-    list_len = len(ecosystem.species_list)
     
-    counter = 1
-    for genus in ecosystem.species_list:
-        print(f"{counter}. {genus.name}")
-        counter += 1
+    while True:
 
-    user_input = user_input_int(
-        input_prompt = f"Please enter the number (from 1 to {list_len}) of the genus you wish to remove: ",
-        check_prompt = f"Please choose an integer from 1 to {list_len}",
-        error_prompt = f"Wrong Input. Please choose an integer from 1 to {list_len}",
-        lower_limit = 1,
-        upper_limit = list_len
-    )
+        list_len = len(ecosystem.species_list)
 
-    user_input = user_input - 1 # python's indexing
+        print("\n")
+        print("-----------------------------")
+        print("        Species List         ")
+        print("-----------------------------")
 
-    ecosystem.remove_species(ecosystem.species_list[user_input])
+        counter = 1
+        for genus in ecosystem.species_list:
+            print(f"{counter}. {genus.name}")
+            counter += 1
+        print(f"{counter}. Exit")
+
+        user_input = user_input_int(
+            input_prompt = f"Please enter the number (from 1 to {list_len}) of the genus you wish to remove (or {list_len + 1} to exit): ",
+            check_prompt = f"Please choose an integer from 1 to {list_len + 1}",
+            error_prompt = f"Wrong Input. Please choose an integer from 1 to {list_len + 1}",
+            lower_limit = 1, upper_limit = list_len + 1
+        )
+
+        if user_input == (list_len + 1):
+            print("Returning to main menu:")
+            return
+
+        user_input = user_input - 1 # python's indexing
+
+        ecosystem.remove_species(ecosystem.species_list[user_input])
 
 
 def show_all_species(ecosystem):
@@ -200,6 +234,8 @@ def show_all_species(ecosystem):
 
 
 def update_resourses(ecosystem):
+
+    print("\n")
     
     if ecosystem == None:
         print("No ecosystem exists yet! Create one first.")
@@ -212,6 +248,7 @@ def update_resourses(ecosystem):
         lower_limit=1
     )
     
-    ecosystem.resourses = user_input
-    print(f"Ecosystem's resourses successfully updated to {user_input}")
+    ecosystem.update_resources(user_input)
+    print("\n")
+    print(f"Ecosystem's resourses successfully updated to {user_input}!")
 

@@ -53,6 +53,7 @@ class Species:
 class Ecosystem:
 
     def __init__(self, resources, species_list=None):
+        
         if resources < 0:
             raise ValueError("Resources must be >= 0")
 
@@ -60,10 +61,12 @@ class Ecosystem:
         self.species_list = species_list if species_list is not None else []
 
     def __str__(self):
+        
         existing_names = [s.name for s in self.species_list]
         return f"Resources: {self.resources}\nSpecies: {existing_names}"
 
     def add_species(self, species: Species):
+
         for genus in self.species_list:
             if genus.name == species.name:
                 print(f"{species.name} already exists.")
@@ -79,7 +82,6 @@ class Ecosystem:
                 print(genus.display_info())
                 return 
         print(f"Sorry but {species} doesn't currently live in the Ecosystem")
-        return None
 
     def remove_species(self, genus):
         if genus in self.species_list:
@@ -88,7 +90,6 @@ class Ecosystem:
             return 
         
         print(f"Sorry but {genus.name} doesn't currently live in the Ecosystem")
-        return None
 
     def display(self):
 
@@ -99,7 +100,42 @@ class Ecosystem:
 
         print(f"and the resources is: {self.resources}")
 
-    #def update_resources(self, num_resources):
+    def update_resources(self, num_recourses):
+        new_resources = self.resources + num_recourses
+        if new_resources < 0:
+            raise ValueError("Resources cannot become negative!")
+
+        self.resources = new_resources
+        print(f"Resources updated to {self.resources}")
+
+    def run_generation(self):
+
+        if not self.species_list:
+            print("No species currently in the ecosystem. Nothing to simulate.")
+            return
+        
+        print("\n--- Running Generation ---")
+
+        total_population_current = sum(genus.population for genus in self.species_list)
+
+        food_availability = 1 if self.resources >= total_population_current else 0
+
+        for species in self.species_list:
+            species.reproduce(food_availability)
+            species.mutate()
+
+        total_population = sum(genus.population for genus in self.species_list)
+
+        self.resources -= total_population
+        if self.resources < 0:
+            self.resources = 0
+
+        print(f"\nFood availability = {food_availability}")
+        print(f"Total population before = {total_population_current}")
+        print(f"Total population after reproduction = {total_population}")
+        print(f"Resources consumed = {total_population}")
+        print(f"Remaining resources = {self.resources}")
+        
 
 
 
