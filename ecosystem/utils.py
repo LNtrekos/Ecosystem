@@ -1,3 +1,12 @@
+'''
+This files contains the helper functions for Input:
+- Integer Input
+- Float Input
+- Charachter Input
+Throughout this project, almost constanty was needed input from the user. The functions help maintain a nice flow
+with proper error handling. 
+'''
+
 def user_input_int(input_prompt, check_prompt , error_prompt, lower_limit=-float('inf'), upper_limit=float('inf')):
     while True:
         try:
@@ -31,7 +40,7 @@ def user_input_float(input_prompt, check_prompt , error_prompt, lower_limit=-flo
 def user_input_character(input_prompt):
 
     while True:
-        user_input = input(input_prompt)
+        user_input = input(input_prompt).strip()
 
         if user_input == "":
             print("Wrong Input. Blank space is not allowed.")
@@ -41,7 +50,9 @@ def user_input_character(input_prompt):
             confirm = input(f"You entered '{user_input}'. Proceed? [Y]/n: ").strip().lower()
 
             if confirm == "" or confirm == "y":
+                print("\n")
                 return user_input
+            
 
             elif confirm == "n":
                 print("Okay, let's try again.\n")

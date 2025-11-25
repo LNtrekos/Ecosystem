@@ -1,7 +1,8 @@
-from ecosystem.menu import menu, create_new_ecosystem, print_ecosystem_info, add_new_species, search_species, update_species, remove_species, show_all_species, update_resourses
+from ecosystem.menu import menu, create_new_ecosystem, print_ecosystem_info, add_new_species, search_species, update_species, remove_species, show_all_species, update_resourses, simulate_generations, simulate_generations_with_interaction, simulate_generations_wrapper
 from ecosystem.classes import Ecosystem, AVAILABLE_SPECIES
 
-eco = Ecosystem(10000)
+print("\nWelcome to Ecosystem: \n")
+eco = Ecosystem(10**3, 0.2)
 for genus in AVAILABLE_SPECIES:
     eco.add_species(genus)
 
@@ -33,7 +34,7 @@ while True:
         update_resourses(eco)
 
     elif choice == 9:
-        print("Simulating generations...")
+        simulate_generations_wrapper(eco)
         
     elif choice == 10:
         print("Exiting...")
