@@ -18,7 +18,7 @@ For details of the above, read report/ecosystem_report.pdf
 From a command prompt (Windows), navigate to the project directory and run:
 
 ```bash
-C:\Ecosystem> python .\main.py
+C:\Ecosystem> python main.py
 ```
 You should she the following output:
 
